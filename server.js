@@ -78,16 +78,22 @@ const authenticateToken = (req, res, next) => {
 };
 
 // Register
+
+
 app.post('/register', async (req, res) => {
-  const { name, email, password, role } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
-  try {
-    await db.run('INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)', [name, email, hashedPassword, role || 'customer']);
-    res.send('User registered');
-  } catch (e) {
-    res.status(400).send('User already exists');
-  }
-});
+    const { name, email, password, role } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+  
+    try {
+      const result = await db.run(
+        `INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)`,
+        [name, email, hashedPassword, role || 'customer']
+      );
+      res.send({ message: 'User registered successfully', id: result.lastID });
+    } catch (e) {
+      res.status(400).send({ error: 'Email already exists' });
+    }
+  });
 
 // Login
 app.post('/login', async (req, res) => {
