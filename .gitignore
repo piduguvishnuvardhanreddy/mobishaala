@@ -21,7 +21,4 @@ Thumbs.db
 .vscode/
 *.swp
 
-# Optional: SQLite or other DB files
-*.sqlite
-*.db
-*.sqlite3
+
